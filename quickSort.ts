@@ -1,23 +1,57 @@
-const arr:Array<Number> =[5,2,1,76,34,25,99,23]
+const arr: Array<number> = [8, 5, 15, 35, 10, 76, 4, 98]
 
-function quickSort(arr){
-if(arr.length<2){
+function partition(arr: number[], low: number, high: number): { arr: number[], newPiIndex: number } {
+    let p = arr[high]
+    let i = low
+    for (let j = low; j < high; j++) {
+        if (arr[j] < p) {
+            let temp = arr[i]
+            arr[i] = arr[j]
+            arr[j] = temp
+            i++
+        }
+
+    }
+    let temp = arr[high]
+    arr[high] = arr[i]
+    arr[i] = temp
+    let newPiIndex = i
+    return { arr, newPiIndex };
+}
+// [5,8,10,15, 35]
+function quickSort(arr: number[], low: number, high: number): number[] {
+    if (low < high) {
+        let pi: number = 0
+        const { arr: prReturnedArray, newPiIndex } = partition(arr, low, high)
+        pi = newPiIndex;
+        arr = quickSort(prReturnedArray, low, pi - 1)
+        arr = quickSort(arr, pi + 1, high)
+    }
     return arr
 }
-let pivot= arr[arr.length-1]
-let left:Array<number>=[]
-let right:Array<number>=[]
+const sortedArray = quickSort(arr, 0, arr.length - 1)
+console.log("ye quicksort hai", sortedArray);
 
-for(let i=0; i<arr.length-1;i++){
-    if(arr[i]<pivot){
-        left.push(arr[i])
+
+function binarySearch(sortedArray: number[], low: number, high: number, targetValue: number): number {
+    let mid: number = 0;
+    while (low < high) {
+        mid = Math.floor((low + high) / 2)
+
+        if (sortedArray[mid] === targetValue) return mid
+
+        if (sortedArray[mid] < targetValue) {
+            low = mid
+        }
+
+        if (sortedArray[mid] > targetValue) {
+            high = mid
+        }
     }
-    else{right.push(arr[i])}
+    return mid
 }
 
-return [...quickSort(left),pivot,...quickSort(right)]
+const result: number = binarySearch(sortedArray, 0, sortedArray.length, 15)
+console.log("ye binary seach hai", result);
 
-}
-
-
-console.log(quickSort(arr))
+export { }
